@@ -28,6 +28,8 @@ router.put('/heatpumps/:heatpump_id', function(req, res) {
   console.log("API PUT request for heatpump with id: " + heatpump_id)
 
   thermostat.update_heatpump(heatpump_id, req.body)  
+  
+  res.sendStatus(200); // equivalent to res.status(200).send('OK')
 });
 
 module.exports = router;
