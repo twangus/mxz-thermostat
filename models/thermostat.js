@@ -97,6 +97,7 @@ function get_heatpump_state(heatpump_id) {
 	heatpump = heatpump_with_id(heatpump_id)
 	return {
 		id : heatpump.id,
+		name: heatpump.name,
 		room_temp : heatpump.room_temp,
 		power : heatpump.power,
 		mode : heatpump.mode,
