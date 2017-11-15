@@ -3,38 +3,58 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel="apple-touch-icon" href="/images/thermostat-icon.png">
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link rel="apple-touch-icon" href="/images/thermostat-icon.png">
     <meta name="viewport" content="width=395">
     <meta name="apple-mobile-web-app-capable" content="yes">
   </head>
   <body>
 
     <script src="/javascripts/jquery-3.2.1.js"></script>
+    <script>
+            
+            
+      function reload_heatpump(heatpump_id) {
+        $("#" + heatpump_id).load("/heatpumps/" + heatpump_id);
+      }
+      
+      function heatpumps_finished_loading () {
+        // When the heatpump view has loaded, set a timer to reload in 10 seconds
+        setTimeout(function() {
+           $("#heatpumps").load("/heatpumps", heatpumps_finished_loading);
+        }, 10000);
+        
+        $(".hp_power").click(function(event) {
+          heatpump_id = $(this).parent().attr("id")
+          current_power = $(this).attr("data-power")
+          new_power = (current_power == "ON") ? "OFF" : "ON"
+          console.log("current_power: " + current_power)
+          console.log("new_power: " + new_power)
+          
+          // First PUT the new state via the API, then reload
+          $.ajax({
+              url: "/api/heatpumps/" + heatpump_id,
+              method: 'PUT',
+              data: {"power": new_power},
+              success: function(result) {
+                  // Do something with the result
+                  reload_heatpump(heatpump_id)
+              }
+          });
+        });
+      }      
+    </script>
 
-    <div id="heatpumps">
-      <% heatpumps.forEach( function(heatpump) { %>
-        <div class="heatpump">
-          <div class="hp_room_temp"><%= heatpump.room_temp %></div>
-          <div class="hp_room_temp_label">Now</div>
-          <div class="hp_name"><%= heatpump.name %></div>
-          <% if (heatpump.power == "ON") { %>
-            <div class="hp_power"><img src="/images/power_symbol_on.png" height="42" width="42"></div>
-            <div class="hp_mode_on"><%= heatpump.mode %></div>
-            <div class="hp_target_temp"><%= heatpump.target_temp %></div>
-            <div class="hp_target_temp_label">Target</div>
-          <% } else { %>
-            <div class="hp_power"><img src="/images/power_symbol_off.png" height="42" width="42"></div>
-            <div class="hp_mode_off"><%= heatpump.mode %></div>
-          <% } %>
-        </div>
-      <% }) %>
-    </div>
-
-    <script>    
-      setTimeout(function() {
-         window.location.reload();
-      }, 10000);
-  </script>
+    <!-- Start with an empty div, load with an AJAX call -->
+    <div id="heatpumps"></div>
+    
+    <script>  
+      
+      $(document).ready(function(){
+        $("#heatpumps").load("/heatpumps", heatpumps_finished_loading);
+      }); 
+      
+    </script>
+    
   </body>
 </html>
