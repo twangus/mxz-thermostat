@@ -1,0 +1,88 @@
+body {
+  font: 14px "Lato", sans-serif;
+}
+
+#heatpumps {
+  width: 375px;
+  margin: 10px auto;
+/*   background-color: #eee;
+  border: 1px solid gray; */
+}
+
+.heatpump {
+  position: relative;
+  margin: 8px 0px; 
+  padding: 5px 10px;
+  overflow:auto;
+  background-color: #fff;
+  border: 1px solid gray;
+}
+
+.hp_name {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.hp_power {
+  float:left;
+  margin-top:10px;
+  margin-left:15px;
+  padding-bottom:20px;
+}
+
+.hp_room_temp {
+  position:absolute;  
+  bottom: 30px;
+  right: 130px;
+  width: 80px;
+  font-size: 36px;
+}
+
+.hp_room_temp_label {
+  position:absolute;
+  bottom: 15px;
+  right: 150px;
+  width: 80px;
+  text-align: center;
+}
+
+.hp_room_temp:after {
+  content: "\B0"
+}
+
+.hp_mode_on {
+  position:absolute;
+  left: 7px;
+  bottom: 5px;
+  width: 80px;
+  text-align: center;
+}
+
+.hp_mode_off {
+  position:absolute;
+  left: 7px;
+  bottom: 5px;
+  width: 80px;
+  text-align: center;
+  color: #acb0a8;
+}
+
+.hp_target_temp {
+  position:absolute;
+  bottom: 29px;
+  right: 10px;
+  width: 80px;
+  font-size: 50px;
+  text-align:center;
+}
+
+.hp_target_temp:after {
+  content: "\B0"
+}
+
+.hp_target_temp_label {
+  position:absolute;
+  bottom: 15px;
+  right: 0px;
+  width: 80px;
+}

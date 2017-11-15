@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  </head>
+  <body>
+
+    <script src="/javascripts/jquery-3.2.1.js"></script>
+
+    <div id="heatpumps">
+      <% heatpumps.forEach( function(heatpump) { %>
+        <div class="heatpump">
+          <div class="hp_room_temp"><%= heatpump.room_temp %></div>
+          <div class="hp_room_temp_label">Now</div>
+          <div class="hp_name"><%= heatpump.name %></div>
+          <% if (heatpump.power == "ON") { %>
+            <div class="hp_power"><img src="/images/power_symbol_on.png" height="42" width="42"></div>
+            <div class="hp_mode_on"><%= heatpump.mode %></div>
+            <div class="hp_target_temp"><%= heatpump.target_temp %></div>
+            <div class="hp_target_temp_label">Target</div>
+          <% } else { %>
+            <div class="hp_power"><img src="/images/power_symbol_off.png" height="42" width="42"></div>
+            <div class="hp_mode_off"><%= heatpump.mode %></div>
+          <% } %>
+        </div>
+      <% }) %>
+    </div>
+
+    <script>    
+      setTimeout(function() {
+         window.location.reload();
+      }, 10000);
+  </script>
+  </body>
+</html>
