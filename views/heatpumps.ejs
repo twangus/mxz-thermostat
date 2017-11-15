@@ -1,0 +1,9 @@
+<!-- Make a div for each heatpump and render the partial for that heatpump -->
+
+      <% heatpumps.forEach( function(heatpump) { %>
+        <div class="heatpump" id="<%= heatpump.id %>">
+
+          <%- include heatpump %>
+
+        </div>
+      <% }) %>
