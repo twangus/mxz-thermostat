@@ -21,29 +21,30 @@ body {
 .hp_name {
   font-weight: bold;
   font-size: 18px;
+  text-transform: uppercase;
 }
 
 .hp_power {
   float:left;
-  margin-top:10px;
-  margin-left:15px;
-  padding-bottom:20px;
+  padding-top:15px;
+  padding-left:15px;
+  padding-bottom:15px;
 }
 
 .hp_room_temp {
-  position:absolute;  
-  bottom: 30px;
-  right: 130px;
+  position:absolute;
+  bottom: 29px;
+  right: 15px;
   width: 80px;
-  font-size: 36px;
+  font-size: 55px;
+  text-align:center;
 }
 
 .hp_room_temp_label {
   position:absolute;
   bottom: 15px;
-  right: 150px;
+  right: 0px;
   width: 80px;
-  text-align: center;
 }
 
 .hp_room_temp:after {
@@ -52,28 +53,39 @@ body {
 
 .hp_mode_on {
   position:absolute;
-  left: 7px;
-  bottom: 5px;
+  right: 115px;
+  bottom: 15px;
   width: 80px;
   text-align: center;
+  text-transform: capitalize;
 }
 
 .hp_mode_off {
   position:absolute;
-  left: 7px;
-  bottom: 5px;
+  right: 115px;
+  bottom: 15px;
   width: 80px;
   text-align: center;
+  text-transform: capitalize;
+  color: #acb0a8;
+}
+
+.hp_mode_icon {
+  position:absolute;
+  right: 115px;
+  bottom: 30px;
+  width: 80px;
+  text-align: center;
+  text-transform: capitalize;
   color: #acb0a8;
 }
 
 .hp_target_temp {
-  position:absolute;
-  bottom: 29px;
-  right: 10px;
+  position:absolute;  
+  bottom: 30px;
+  left: 112px;
   width: 80px;
-  font-size: 50px;
-  text-align:center;
+  font-size: 32px;
 }
 
 .hp_target_temp:after {
@@ -83,6 +95,8 @@ body {
 .hp_target_temp_label {
   position:absolute;
   bottom: 15px;
-  right: 0px;
+  left: 90px;
   width: 80px;
+  text-align: center;  
 }
+

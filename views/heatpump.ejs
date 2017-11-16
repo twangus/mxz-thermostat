@@ -3,10 +3,28 @@
           <div class="hp_name"><%= heatpump.name %></div>
           <% if (heatpump.power == "ON") { %>
             <div class="hp_power" id="<%= heatpump.id %>" data-power="ON"><img src="/images/power_symbol_on.png" height="42" width="42"></div>
-            <div class="hp_mode_on"><%= heatpump.mode %></div>
+            <div class="hp_mode_on"><%= heatpump.mode.toLowerCase() %></div>
+            <div class="hp_mode_icon">
+              <% if (heatpump.mode == "AUTO") { %>
+                <img src="/images/auto_on.png" height="42" width="42">
+              <% } else if (heatpump.mode == "HEAT") { %>
+                <img src="/images/heat_on.png" height="42" width="42">
+              <% } else if (heatpump.mode == "COOL") { %>
+                <img src="/images/cool_on.png" height="42" width="42">
+              <% } %>
+            </div>
             <div class="hp_target_temp"><%= heatpump.target_temp %></div>
             <div class="hp_target_temp_label">Target</div>
           <% } else { %>
             <div class="hp_power" id="<%= heatpump.id %>" data-power="OFF"><img src="/images/power_symbol_off.png" height="42" width="42"></div>
-            <div class="hp_mode_off"><%= heatpump.mode %></div>
+            <div class="hp_mode_off"><%= heatpump.mode.toLowerCase() %></div>
+            <div class="hp_mode_icon">
+              <% if (heatpump.mode == "AUTO") { %>
+                <img src="/images/auto_off.png" height="42" width="42">
+              <% } else if (heatpump.mode == "HEAT") { %>
+                <img src="/images/heat_off.png" height="42" width="42">
+              <% } else if (heatpump.mode == "COOL") { %>
+                <img src="/images/cool_off.png" height="42" width="42">
+              <% } %>
+            </div>
           <% } %>
