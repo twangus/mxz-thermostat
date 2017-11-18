@@ -19,9 +19,7 @@ var thermostat = require('../models/thermostat.js')
 router.get('/', function(req, res, next) {
   res.render('index', { 
       title: 'Thermostat',
-      heatpumps: thermostat.get_heatpump_states(),
-      power_icon_url: power_icon_url,
-      mode_icon_url: mode_icon_url
+      heatpumps: thermostat.get_heatpump_states()
   });
 });
 

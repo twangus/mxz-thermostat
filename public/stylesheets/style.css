@@ -5,8 +5,6 @@ body {
 #heatpumps {
   width: 375px;
   margin: 10px auto;
-/*   background-color: #eee;
-  border: 1px solid gray; */
 }
 
 .heatpump {
@@ -92,10 +90,35 @@ body {
 
 .hp_mode_icon {
   position:absolute;
-  right: 105px;
+  right: 123px;
   bottom: 22px;
-  width: 80px;
-  text-align: center;
+  background-size: 42px 42px;
+  width:42px;
+  height:42px;
+}
+
+.heatpump[data-mode="AUTO"][data-power="ON"] .hp_mode_icon {
+  background-image: url('/images/auto_on.png');
+}
+
+.heatpump[data-mode="AUTO"][data-power="OFF"] .hp_mode_icon {
+  background-image: url('/images/auto_off.png');
+}
+
+.heatpump[data-mode="HEAT"][data-power="ON"] .hp_mode_icon {
+  background-image: url('/images/heat_on.png');
+}
+
+.heatpump[data-mode="HEAT"][data-power="OFF"] .hp_mode_icon {
+  background-image: url('/images/heat_off.png');
+}
+
+.heatpump[data-mode="COOL"][data-power="ON"] .hp_mode_icon {
+  background-image: url('/images/cool_on.png');
+}
+
+.heatpump[data-mode="COOL"][data-power="OFF"] .hp_mode_icon {
+  background-image: url('/images/cool_off.png');
 }
 
 .hp_target_temp[data-target-temp]:before {
