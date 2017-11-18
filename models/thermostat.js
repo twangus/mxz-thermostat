@@ -140,7 +140,12 @@ function update_heatpump(heatpump_id, new_state) {
 
 		// Set the mode - allowable options "AUTO", "HEAT", "COOL"
 		case 'mode':
-		  console.log("Setting mode not yet implemented");
+		  new_mode = new_state['mode']
+		  if (['AUTO', 'HEAT', 'COOL'].includes(new_mode)) {
+		  	heatpump.mode = new_mode
+		  } else {
+		    console.log("Unsupported mode (" + new_mode + ") in PUT request")
+		  }
 		  break;
 
 		// Set the target_temp - not yet implemented

@@ -1,15 +1,20 @@
-<div class="hp_name"><%= heatpump.name %></div>
-<div class="hp_status">
-  <div class="hp_room_temp" data-room-temp="<%= heatpump.room_temp %>"></div>
-  <div class="hp_room_temp_label">Now</div>
-  <div class="hp_power"></div>
-  <div class="hp_mode">
-    <div class="hp_mode_label"></div>
-    <div class="hp_mode_icon"></div>
-  </div>
+<div class="heatpump" id="<%= heatpump.id %>" data-power="<%= heatpump.power %>" data-mode="<%= heatpump.mode %>">
 
-  <div class="hp_target">
-    <div class="hp_target_temp" data-target-temp="<%= heatpump.target_temp %>"></div>
-    <div class="hp_target_temp_label">Target</div>
+  <div class="hp_name"><%= heatpump.name %></div>
+  <div class="hp_status">
+    <div class="hp_room_temp" data-room-temp="<%= heatpump.room_temp %>"></div>
+    <div class="hp_room_temp_label">Now</div>
+    <div class="hp_power"></div>
+    <div class="hp_mode">
+      <div class="hp_mode_label"></div>
+      <div class="hp_mode_icon"></div>
+    </div>
+  
+    <div class="hp_target">
+      <div class="hp_target_temp" data-target-temp="<%= heatpump.target_temp %>"></div>
+      <div class="hp_target_temp_label">Target</div>
+    </div>
   </div>
+ 
+  <%- include mode_select %>
 </div>

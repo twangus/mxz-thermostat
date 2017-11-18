@@ -13,17 +13,22 @@
     <script src="/javascripts/jquery-3.2.1.js"></script>
 
     <div id="heatpumps">
-      <%- include heatpumps %>
+      <% heatpumps.forEach( function(heatpump) { %>
+          <%- include heatpump %>
+      <% }) %>
     </div>
     
     <script>  
       
       $(document).ready(function() {
         
+        $(".mode_select").hide()
+        
         setTimeout(function() {
            refresh_loop();
         }, 10000);
         
+        // Click the power icon to toggle HeatPump power on/off
         $(".hp_power").click(function() {
           heatpump_div = $(this).parents(".heatpump")
           heatpump_id = heatpump_div.attr("id")
@@ -32,25 +37,33 @@
           new_power = (current_power == "ON") ? "OFF" : "ON"
           console.log ("new power: " + new_power)
           
-          // First PUT the new state via the API, then reload
-          $.ajax({
-              url: "/api/heatpumps/" + heatpump_id,
-              method: 'PUT',
-              data: {"power": new_power},
-              success: function(result) {
-                  
-                  // Then reload the data for that heatpump
-                  console.log("Successful PUT")
-                  reload_heatpump(heatpump_id)
-              }
-          });
+          put_data_for_heatpump({"power": new_power}, heatpump_id)
         });
         
+        // Click the mode icon to show the mode selector
         $(".hp_mode").click(function() {
           heatpump_id = $(this).parents(".heatpump").attr("id")
-          console.log(heatpump_id)
           $(this).hide();
-          show_mode_selector(heatpump_id);
+          $("#" + heatpump_id + " .mode_select").fadeIn()
+        });
+        
+        // Click a button in the mode selector to select a new mode
+        $(".mode_button").click(function() {
+          heatpump_div = $(this).parents(".heatpump")
+          heatpump_id = heatpump_div.attr("id")
+          
+          $(this).parents(".mode_select").hide()
+          $("#" + heatpump_id + " .hp_mode").fadeIn()
+          
+          // ...
+          current_mode = heatpump_div.attr("data-mode")
+          console.log ("current mode: " + current_mode)
+          new_mode = $(this).attr("id")
+          console.log ("new mode: " + new_mode)
+          
+          if (new_mode != current_mode) {
+            put_data_for_heatpump({"mode": new_mode}, heatpump_id)
+          }
         });
       }); 
       
@@ -94,9 +107,20 @@
         })
       }
       
-      function show_mode_selector(heatpump_id) {
-        html_to_add = ''
-        $("#" + heatpump_id + ".mode_select").html(html_to_add)
+      function put_data_for_heatpump(data, heatpump_id) {
+        // First PUT the new state via the API, then reload
+        $.ajax({
+            url: "/api/heatpumps/" + heatpump_id,
+            method: 'PUT',
+            data: data,
+            success: function(result) {
+                
+                // Then reload the data for that heatpump
+                console.log("Successful PUT")
+                reload_heatpump(heatpump_id)
+            }
+        });
+
       }
       
     </script>

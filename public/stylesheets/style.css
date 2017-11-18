@@ -154,8 +154,8 @@ body {
   visibility: hidden;
 }
 
-.mode_select {
-  display: none;
+table.mode_select {
+  table-layout: fixed;
   margin-top: 5px;
   width: 100%;
   border: solid gray 1px;
@@ -163,24 +163,61 @@ body {
   background-color: #eee;
 }
 
-.mode_button {
-  display: table-cell;
-  text-align: center;
-  padding-top: 10px;
-  padding-bottom: 5px;
+.mode_button { 
+  width: 33%;
+  border: solid gray 1px;
+  padding: 5px 0px;
 }
 
-.mode_button_selected {
-  display: table-cell;
-  text-align: center;
-  padding: 10px 0px;
-  background-color: #ddd;
+.heatpump[data-mode="AUTO"] .mode_button[id="AUTO"],
+.heatpump[data-mode="HEAT"] .mode_button[id="HEAT"],
+.heatpump[data-mode="COOL"] .mode_button[id="COOL"] { 
+  background-color: #fff;
+}
+
+.mode_button_group {
+  width: 80px;
+  margin: 0px auto;
+}
+
+.mode_button_icon {
+  float: left;
+  background-size: 32px 32px;
+  width:32px;
+  height:32px;
 }
 
 .mode_button_label {
   font-size: 16px;
-  vertical-align:middle;
-  position:relative;
-  padding-left:5px;
-  bottom: 10px;
+  position: relative;
+  left: 7px;
+  top: 7px;
+}
+
+.mode_button[id="AUTO"] .mode_button_icon {
+  background-image: url('/images/auto_on.png');
+}
+
+.mode_button[id="HEAT"] .mode_button_icon {
+  background-image: url('/images/heat_on.png');
+}
+
+.mode_button[id="COOL"] .mode_button_icon {
+  background-image: url('/images/cool_on.png');
+}
+
+.mode_button[id="AUTO"] .mode_button_label:after {
+  content: "Auto";
+}
+
+.mode_button[id="HEAT"] .mode_button_label:after {
+  content: "Heat";
+}
+
+.mode_button[id="COOL"] .mode_button_label:after {
+  content: "Cool";
+}
+
+.heatpump[data-mode="COOL"] .hp_mode_icon {
+  ...
 }
