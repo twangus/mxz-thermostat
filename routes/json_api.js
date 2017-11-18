@@ -7,15 +7,14 @@ var thermostat = require('../models/thermostat.js')
 
 /* GET data for all the heatpumps */
 router.get('/heatpumps', function(req, res) {
-  res.json({ message : "not implemented"});
+  var heatpumps = thermostat.get_heatpump_states();
+  res.json(heatpumps);
 });
 
 /* GET data for a single heatpump */
 router.get('/heatpumps/:heatpump_id', function(req, res) {
   heatpump_id = req.params.heatpump_id
-  console.log("API GET request for heatpump with id: " + heatpump_id)
   var heatpump = thermostat.get_heatpump_state(heatpump_id);
-  console.log(heatpump);
   res.json(heatpump);
 });
 
@@ -25,11 +24,9 @@ router.get('/heatpumps/:heatpump_id', function(req, res) {
 router.put('/heatpumps/:heatpump_id', function(req, res) {
   heatpump_id = req.params.heatpump_id
 
-  console.log("API PUT request for heatpump with id: " + heatpump_id)
-
   thermostat.update_heatpump(heatpump_id, req.body)  
   
-  res.sendStatus(200); // equivalent to res.status(200).send('OK')
+  res.sendStatus(200);
 });
 
 module.exports = router;

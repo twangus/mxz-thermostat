@@ -13,9 +13,30 @@
     <script src="/javascripts/jquery-3.2.1.js"></script>
     <script>
             
+      function reload_data() {
+        $.getJSON("/api/heatpumps")
+        .done(function( heatpumps) {
+          $.each(heatpumps, function(index, heatpump) {
+            console.log( heatpump )
+            heatpump_id = heatpump.id
+            $("#" + heatpump_id).attr("data-power", heatpump.power)
+            $("#" + heatpump_id).attr("data-mode", heatpump.mode)
+            $("#" + heatpump_id + " .hp_room_temp").attr("data-room-temp", heatpump.room_temp)
+            $("#" + heatpump_id + " .hp_target_temp").attr("data-target-temp", heatpump.target_temp)
+          });
+        })
+        .fail(function() {
+          console.log( "Error calling /api/heatpumps..." );
+        })
+      }
             
       function reload_heatpump(heatpump_id) {
         $("#" + heatpump_id).load("/heatpumps/" + heatpump_id);
+      }
+      
+      function show_mode_selector(heatpump_id) {
+        html_to_add = ''
+        $("#" + heatpump_id + ".mode_select").html(html_to_add)
       }
       
       function heatpumps_finished_loading () {
@@ -24,8 +45,8 @@
            $("#heatpumps").load("/heatpumps", heatpumps_finished_loading);
         }, 10000);
         
-        $(".hp_power").click(function(event) {
-          heatpump_id = $(this).parent().attr("id")
+        $(".hp_power").click(function() {
+          heatpump_id = $(this).attr("id")
           current_power = $(this).attr("data-power")
           new_power = (current_power == "ON") ? "OFF" : "ON"
           console.log("current_power: " + current_power)
@@ -38,20 +59,41 @@
               data: {"power": new_power},
               success: function(result) {
                   // Do something with the result
+                  console.log("Successful PUT")
                   reload_heatpump(heatpump_id)
               }
           });
+        });
+        
+        $(".hp_mode").click(function() {
+          heatpump_id = $(this).attr("id")
+          console.log(heatpump_id)
+          $(this).hide();
+          show_mode_selector(heatpump_id);
         });
       }      
     </script>
 
     <!-- Start with an empty div, load with an AJAX call -->
-    <div id="heatpumps"></div>
+    <div id="heatpumps">
+      <%- include heatpumps %>
+    </div>
     
     <script>  
       
-      $(document).ready(function(){
-        $("#heatpumps").load("/heatpumps", heatpumps_finished_loading);
+      function refresh_loop() {
+        reload_data()
+        
+        setTimeout(function() {
+           refresh_loop();
+        }, 10000);
+      }
+      
+      $(document).ready(function() {
+        
+        setTimeout(function() {
+           refresh_loop();
+        }, 10000);
       }); 
       
     </script>

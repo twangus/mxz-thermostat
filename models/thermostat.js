@@ -46,37 +46,37 @@ function cToF (tempC) {
 var client  = mqtt.connect('mqtt://192.168.1.112/')
 
 client.on('connect', function () {
-	heatpumps.forEach(function (heatpump) {
-	 	client.subscribe(heatpump.topic)
-	 	 	console.log("Subscribed to topic: " + heatpump.topic)
-	 	 	
-	 	 	client.subscribe(heatpump.status_topic)
-	 		console.log("Subscribed to topic: " + heatpump.status_topic)
-	})
+    heatpumps.forEach(function (heatpump) {
+        client.subscribe(heatpump.topic)
+            console.log("Subscribed to topic: " + heatpump.topic)
+            
+            client.subscribe(heatpump.status_topic)
+            console.log("Subscribed to topic: " + heatpump.status_topic)
+    })
 })
 
 client.on('message', function (topic, message) {
   console.log(topic.toString() + " - " + message.toString())
  
-	heatpumps.forEach(function (heatpump) {
-	 	if (topic == heatpump.topic) {
-		 	new_state = JSON.parse(message)
-		 	heatpump.power = new_state.power
-		 	heatpump.mode = new_state.mode
-		 	heatpump.target_temp = Math.round(cToF(new_state.temperature))
-	 	}
-	 	
-	 	if (topic == heatpump.status_topic) {
-	 		status = JSON.parse(message)
-	 		heatpump.room_temp = Math.round(cToF(status.roomTemperature))
-	 	 }
-	}) 
+    heatpumps.forEach(function (heatpump) {
+        if (topic == heatpump.topic) {
+            new_state = JSON.parse(message)
+            heatpump.power = new_state.power
+            heatpump.mode = new_state.mode
+            heatpump.target_temp = Math.round(cToF(new_state.temperature))
+        }
+        
+        if (topic == heatpump.status_topic) {
+            status = JSON.parse(message)
+            heatpump.room_temp = Math.round(cToF(status.roomTemperature))
+         }
+    }) 
 })
 
 function send_update_message(heatpump) {
-	message = '{"power":"' + heatpump.power + '","mode":"' + heatpump.mode + '"}'
-	console.log("message: " + message)
-	client.publish(heatpump.set_topic, message)
+    // message = '{"power":"' + heatpump.power + '","mode":"' + heatpump.mode + '"}'
+    // console.log("message: " + message)
+    // client.publish(heatpump.set_topic, message)
 }
 
 // API

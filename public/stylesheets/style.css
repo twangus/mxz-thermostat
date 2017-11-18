@@ -25,24 +25,38 @@ body {
 }
 
 .hp_power {
-  float:left;
-  padding-top:15px;
-  padding-left:15px;
-  padding-bottom:15px;
+  background-size: 42px 42px;
+  width:42px;
+  height:42px;
+  margin-top:15px;
+  margin-left:15px;
+  margin-bottom:15px;
+}
+
+.heatpump[data-power="ON"] .hp_power {
+  background-image: url('/images/power_icon_on.png');
+}
+
+.heatpump[data-power="OFF"] .hp_power {
+  background-image: url('/images/power_icon_off.png');
+}
+
+.hp_room_temp[data-room-temp]:before {
+  content: attr(data-room-temp);
 }
 
 .hp_room_temp {
   position:absolute;
-  bottom: 29px;
+  bottom: 18px;
   right: 15px;
   width: 80px;
-  font-size: 55px;
+  font-size: 50px;
   text-align:center;
 }
 
 .hp_room_temp_label {
   position:absolute;
-  bottom: 15px;
+  bottom: 5px;
   right: 0px;
   width: 80px;
 }
@@ -51,38 +65,46 @@ body {
   content: "\B0"
 }
 
-.hp_mode_on {
+.hp_mode_label {
   position:absolute;
-  right: 115px;
-  bottom: 15px;
+  right: 105px;
+  bottom: 5px;
   width: 80px;
   text-align: center;
   text-transform: capitalize;
 }
 
-.hp_mode_off {
-  position:absolute;
-  right: 115px;
-  bottom: 15px;
-  width: 80px;
-  text-align: center;
-  text-transform: capitalize;
+.heatpump[data-mode="AUTO"] .hp_mode_label:after {
+  content: "Auto"
+}
+
+.heatpump[data-mode="HEAT"] .hp_mode_label:after {
+  content: "Heat"
+}
+
+.heatpump[data-mode="COOL"] .hp_mode_label:after {
+  content: "Cool"
+}
+
+.heatpump[data-power="OFF"] .hp_mode_label {
   color: #acb0a8;
 }
 
 .hp_mode_icon {
   position:absolute;
-  right: 115px;
-  bottom: 30px;
+  right: 105px;
+  bottom: 22px;
   width: 80px;
   text-align: center;
-  text-transform: capitalize;
-  color: #acb0a8;
+}
+
+.hp_target_temp[data-target-temp]:before {
+  content: attr(data-target-temp);
 }
 
 .hp_target_temp {
   position:absolute;  
-  bottom: 30px;
+  bottom: 23px;
   left: 112px;
   width: 80px;
   font-size: 32px;
@@ -94,9 +116,48 @@ body {
 
 .hp_target_temp_label {
   position:absolute;
-  bottom: 15px;
+  bottom: 5px;
   left: 90px;
   width: 80px;
   text-align: center;  
 }
 
+.hp_status {
+  position:relative;
+  border: solid white 1px;
+}
+
+.heatpump[data-power="OFF"] .hp_target {
+  visibility: hidden;
+}
+
+.mode_select {
+  display: none;
+  margin-top: 5px;
+  width: 100%;
+  border: solid gray 1px;
+  position:relative;
+  background-color: #eee;
+}
+
+.mode_button {
+  display: table-cell;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+
+.mode_button_selected {
+  display: table-cell;
+  text-align: center;
+  padding: 10px 0px;
+  background-color: #ddd;
+}
+
+.mode_button_label {
+  font-size: 16px;
+  vertical-align:middle;
+  position:relative;
+  padding-left:5px;
+  bottom: 10px;
+}
