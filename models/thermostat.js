@@ -74,9 +74,9 @@ client.on('message', function (topic, message) {
 })
 
 function send_update_message(heatpump) {
-    // message = '{"power":"' + heatpump.power + '","mode":"' + heatpump.mode + '"}'
-    // console.log("message: " + message)
-    // client.publish(heatpump.set_topic, message)
+    message = '{"power":"' + heatpump.power + '","mode":"' + heatpump.mode + '"}'
+    console.log("message: " + message)
+    client.publish(heatpump.set_topic, message)
 }
 
 // API
