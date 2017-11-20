@@ -37,8 +37,20 @@ function heatpump_with_id(heatpump_id) {
 
 // Helpers
 
+// These are the same helpers used in the heatpump library, but the Mitsubishi remotes
+// do weird, inaccurate temperature conversions.  So, for several temperature settings,
+// the remote will actually set the heatpump to a Celcius setting more than one degree
+// Fahrenheit off from what the user actually sets
+
+function fToC (tempF) {
+  tempC = (tempF - 32) * (5/9)
+  tempC = Math.round(tempC * 2.0) / 2.0 // Round to the nearest 0.5 decimal place
+  return tempC
+}
+
 function cToF (tempC) {
-	return tempC * (9/5) + 32
+	tempF = tempC * (9/5) + 32
+	return Math.round(tempF)
 }
 
 // Set up the MQTT client and subscribe to the relevant topics for each heat pump
@@ -63,18 +75,18 @@ client.on('message', function (topic, message) {
             new_state = JSON.parse(message)
             heatpump.power = new_state.power
             heatpump.mode = new_state.mode
-            heatpump.target_temp = Math.round(cToF(new_state.temperature))
+            heatpump.target_temp = cToF(new_state.temperature)
         }
         
         if (topic == heatpump.status_topic) {
             status = JSON.parse(message)
-            heatpump.room_temp = Math.round(cToF(status.roomTemperature))
+            heatpump.room_temp = cToF(status.roomTemperature)
          }
     }) 
 })
 
 function send_update_message(heatpump) {
-    message = '{"power":"' + heatpump.power + '","mode":"' + heatpump.mode + '"}'
+    message = '{"power":"' + heatpump.power + '","mode":"' + heatpump.mode + '", "temperature":' + fToC(heatpump.target_temp) + '}'
     console.log("message: " + message)
     client.publish(heatpump.set_topic, message)
 }
@@ -148,9 +160,14 @@ function update_heatpump(heatpump_id, new_state) {
 		  }
 		  break;
 
-		// Set the target_temp - not yet implemented
+		// Set the target_temp - any value between 61 F (16 C) and 88 F (31 C)
 		case 'target_temp':
-		  console.log("Setting target temperature not yet implemented");
+		  new_target_temp = new_state['target_temp']
+		  if (new_target_temp >= 61 && new_target_temp <= 88) {
+			  heatpump.target_temp = new_target_temp
+		  } else {
+		  	console.log("Unsupported target temperature (" + new_target_temp + ") in PUT request");
+		  }
 		  break;
 		  
 		default:
@@ -160,7 +177,7 @@ function update_heatpump(heatpump_id, new_state) {
 
 	console.log("New state:" + util.inspect(heatpump))
 	
-	// NEED TO ACTUALLY CHANGE THE STATE ON THE MACHINE
+	// Send message to change the state on the heatpump
 	send_update_message(heatpump)
 }
 

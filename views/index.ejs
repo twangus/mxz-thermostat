@@ -7,10 +7,13 @@
     <link rel="apple-touch-icon" href="/images/thermostat-icon.png">
     <meta name="viewport" content="width=395">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    
+    <script src="/javascripts/jquery-3.2.1.js"></script>
+    <script src="javascripts/nouislider.js"></script>
+    <script src="javascripts/wNumb.js"></script>
+    <link rel='stylesheet' href='/stylesheets/nouislider.css' />
   </head>
   <body>
-
-    <script src="/javascripts/jquery-3.2.1.js"></script>
 
     <div id="heatpumps">
       <% heatpumps.forEach( function(heatpump) { %>
@@ -23,6 +26,7 @@
       $(document).ready(function() {
         
         $(".mode_select").hide()
+        $(".target_select").hide()
         
         setTimeout(function() {
            refresh_loop();
@@ -30,7 +34,7 @@
         
         // Click the power icon to toggle HeatPump power on/off
         $(".hp_power").click(function() {
-          heatpump_div = $(this).parents(".heatpump")
+          heatpump_div = $(this).closest(".heatpump")
           heatpump_id = heatpump_div.attr("id")
           current_power = heatpump_div.attr("data-power")
           console.log ("current power: " + current_power)
@@ -42,17 +46,17 @@
         
         // Click the mode icon to show the mode selector
         $(".hp_mode").click(function() {
-          heatpump_id = $(this).parents(".heatpump").attr("id")
+          heatpump_id = $(this).closest(".heatpump").attr("id")
           $(this).hide();
           $("#" + heatpump_id + " .mode_select").fadeIn()
         });
         
         // Click a button in the mode selector to select a new mode
         $(".mode_button").click(function() {
-          heatpump_div = $(this).parents(".heatpump")
+          heatpump_div = $(this).closest(".heatpump")
           heatpump_id = heatpump_div.attr("id")
           
-          $(this).parents(".mode_select").hide()
+          $(this).closest(".mode_select").hide()
           $("#" + heatpump_id + " .hp_mode").fadeIn()
           
           // ...
@@ -65,6 +69,81 @@
             put_data_for_heatpump({"mode": new_mode}, heatpump_id)
           }
         });
+        
+        // Set up the target selection slider
+        var target_sliders = document.getElementsByClassName('target_slider');
+        
+        for ( var i = 0; i < target_sliders.length; i++ ) {
+          noUiSlider.create(target_sliders[i], {
+            start: 70,
+            range: {
+              'min': 65,
+              'max' : 75
+            },
+            format: wNumb({decimals: 0}),
+            step: 1,
+            pips: {
+              mode: 'values',
+              values: [65, 70, 75],
+              density: 10
+            }
+          })
+          target_sliders[i].noUiSlider.on('slide', update_target_selector_temp);
+        }
+        
+        // Click the target temp to show the target selector
+        $(".hp_target").click(function() {
+          // Get the heatpump_id and current target temperature
+          heatpump_id = $(this).closest(".heatpump").attr("id")
+          target_temp_div = $("#" + heatpump_id + " .hp_target_temp")
+          target_temp = target_temp_div.attr("data-target-temp")
+          
+          // Initialize the new_target_temp display with the current target
+          new_target_temp_div = $("#" + heatpump_id + " .hp_new_target_temp")
+          new_target_temp_div.attr("data-new-target-temp", target_temp)
+          
+          // Replace the target temp display (that shows the actual target)
+          // with the new_target_temp displaye (that shows what will be set)
+          target_temp_div.hide();
+          new_target_temp_div.show();
+          
+          // Find the appropriate and initialize to the current target
+          target_slider = $("#" + heatpump_id + " .target_slider")
+          target_slider_dom = target_slider[0]
+          target_slider_dom.noUiSlider.set(target_temp)
+          
+          // show the initialized target selector
+          $("#" + heatpump_id + " .target_select").fadeIn()
+        });
+        
+        // Click the "ok" button in the target selector to submit the new target temp
+        $(".target_ok").click(function() {
+          // Get the heatpump id
+          heatpump_div = $(this).closest(".heatpump")
+          heatpump_id = heatpump_div.attr("id")
+          
+          // get the divs for target temp and new target temp
+          target_temp_div = $("#" + heatpump_id + " .hp_target_temp")
+          new_target_temp_div = $("#" + heatpump_id + " .hp_new_target_temp")
+          
+          // get the new target temperature and update the data attribute for the target_temp_div
+          old_target_temp = target_temp_div.attr("data-target-temp")
+          new_target_temp = new_target_temp_div.attr("data-new-target-temp")
+          
+          if (new_target_temp != old_target_temp) {
+             target_temp_div.attr("data-target-temp", new_target_temp) // probably not strictly necessary
+             put_data_for_heatpump({"target_temp": new_target_temp}, heatpump_id)
+          }
+          
+          // Replace the new target temp display (that shows what was selected)
+          // with the newly updated target temp display (that shows the actual temperature in the model)
+          target_temp_div.hide();
+          new_target_temp_div.show();
+          
+          // hide the target temp selector
+          $(this).closest(".target_select").hide()          
+          
+        }); 
       }); 
       
       function refresh_loop() {
@@ -120,9 +199,48 @@
                 reload_heatpump(heatpump_id)
             }
         });
-
       }
       
+      function update_target_selector_temp() {
+        // Find the slider that was actually updated.  This seems like a ridiculous way to do it,
+        // but I can't figure out any nicer way to get the DOM element that generated this call
+        var target_sliders = $(".target_slider")
+        var i = 0
+        while (target_sliders[i].noUiSlider != this) {
+          i++;
+        }
+        target_slider_dom = target_sliders[i]
+
+        // get the heatpump_id corresponding to the slider that moved
+        heatpump_div = target_slider_dom.closest(".heatpump")
+        heatpump_id = heatpump_div.id
+        
+        // Get the new target temp from the slider
+        new_target_temp = target_slider_dom.noUiSlider.get()
+        
+        console.log("update slider for heatpump " + heatpump_id + " to target temp: " + new_target_temp)
+        
+        // Update the display to show the new target temp
+        new_target_temp_div = $("#" + heatpump_id + " .hp_new_target_temp")
+        new_target_temp_div.attr("data-new-target-temp", new_target_temp)
+        
+        
+        // document.getElementsByClassName('target_slider');
+        // console.log(target_sliders)
+        // 
+        // for ( var i = 0; i < target_sliders.length; i++ ) {
+          // target_slider = target_sliders[i]
+          // console.log(target_slider)
+          // console.log("sliders: " + sliders)
+          // new_target_temp = target_slider.noUiSlider
+          // console.log(new_target_temp)
+          // heatpump_div = target_slider.closest(".heatpump")
+          // heatpump_id = heatpump_div.id
+          // console.log("update slider for heatpump " + heatpump_id + " to target temp: " + new_target_temp)
+
+        // }
+      }
+    
     </script>
     
   </body>

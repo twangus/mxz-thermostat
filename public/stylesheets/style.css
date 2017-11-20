@@ -125,7 +125,7 @@ body {
   content: attr(data-target-temp);
 }
 
-.hp_target_temp {
+.hp_target_temp, .hp_new_target_temp {
   position:absolute;  
   bottom: 23px;
   left: 112px;
@@ -133,7 +133,8 @@ body {
   font-size: 32px;
 }
 
-.hp_target_temp:after {
+.hp_target_temp:after,
+.hp_new_target_temp:after {
   content: "\B0"
 }
 
@@ -218,6 +219,51 @@ table.mode_select {
   content: "Cool";
 }
 
-.heatpump[data-mode="COOL"] .hp_mode_icon {
-  ...
+.target_select {
+  margin-top: 5px;
+  width: 100%;
+  border: solid gray 1px;
+  position:relative;
+  background-color: #eee;
+}
+
+.target_slider {
+  margin-top: 15px;
+  margin-bottom: 45px;
+  margin-left: 20px;
+  margin-right: 55px;
+}
+
+.target_select .target_ok {
+  position: absolute;
+  bottom:18px;
+  right:8px;
+}
+
+/* .new_target_temp looks identical to the target temp but only displays */
+/* when the target selector is shown and updates to show what the new target */
+/* will be set when the "ok" button is pressed */
+.hp_new_target_temp[data-new-target-temp]:before {
+  content: attr(data-new-target-temp); 
+}
+
+.hp_new_target_temp {
+  display: none;
+}
+
+.target_select .noUi-handle {
+  border: 1px solid #888;
+}
+
+.target_select .noUi-target {
+  border: 1px solid #888;
+}
+
+.target_select .noUi-handle:before,
+.target_select .noUi-handle:after {
+  background: #888;
+}
+
+.target_select .noUi-value {
+  margin-top: 6px;
 }
