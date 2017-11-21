@@ -231,7 +231,7 @@ table.mode_select {
   margin-top: 15px;
   margin-bottom: 45px;
   margin-left: 20px;
-  margin-right: 55px;
+  margin-right: 20px;
 }
 
 .target_select .target_ok {
@@ -266,4 +266,8 @@ table.mode_select {
 
 .target_select .noUi-value {
   margin-top: 6px;
+}
+
+.target_select .noUi-pips-horizontal {
+  height: 30px;
 }
