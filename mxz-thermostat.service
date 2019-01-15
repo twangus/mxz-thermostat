@@ -1,0 +1,18 @@
+[Unit]
+Description=MXZ-Thermostat
+Requires=network.target
+
+[Service]
+Type=simple
+Restart=on-failure
+User=nobody
+Group=dialout
+WorkingDirectory=/home/pi/mxz-thermostat
+ExecStart=/usr/bin/node /home/pi/mxz-thermostat/bin/www
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=mxz-thermostat
+
+[Install]
+WantedBy=multi-user.target
+
