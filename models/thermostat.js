@@ -20,9 +20,9 @@ function addHeatPump (name, id) {
 	})
 }
 
-addHeatPump("Nursery", "1")
-addHeatPump("Sophie's Room", "2")
-addHeatPump("Master", "3")
+addHeatPump("Office", "1")
+addHeatPump("Kids Room", "2")
+addHeatPump("Bedroom", "3")
 addHeatPump("Playroom", "4")
 
 function heatpump_with_id(heatpump_id) {
